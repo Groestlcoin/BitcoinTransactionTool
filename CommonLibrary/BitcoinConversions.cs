@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
+using NBitcoin.Altcoins;
 
 namespace CommonLibrary
 {
@@ -80,8 +81,9 @@ namespace CommonLibrary
         /// </summary>
         /// <param name="data">Hash160 string value.</param>
         /// <returns>Base58 Encoded result.</returns>
-        public static string Base58ToHash160(string data)
-        {
+        public static string Base58ToHash160(string data) {
+            return Groestlcoin.GroestlEncoder.Instance.DecodeData(data);
+
             // Decode Base58 string to BigInteger 
             BigInteger intData = 0;
             for (var i = 0; i < data.Length; i++)

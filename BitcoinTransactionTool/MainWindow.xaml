@@ -60,7 +60,7 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Confirmation" DisplayMemberBinding="{Binding Confirmation}"/>
-                    <GridViewColumn Header="Amount" Width="100" DisplayMemberBinding="{Binding Amount, StringFormat=\{0:N0\}}"/>
+                    <GridViewColumn Header="Amount" Width="100" DisplayMemberBinding="{Binding AmountBitcoin}"/>
                     <GridViewColumn Header="Hash" Width="435" DisplayMemberBinding="{Binding TxHash}"/>
                 </GridView>
             </ListView.View>

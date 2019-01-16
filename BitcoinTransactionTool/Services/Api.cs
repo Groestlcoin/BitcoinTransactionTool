@@ -10,7 +10,7 @@ namespace BitcoinTransactionTool.Services
     public enum TxApiNames
     {
         BlockCypher,
-        BlockchainInfo,
+        Chainz,
     }
 
     public abstract class Api

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinTransactionTool", "BitcoinTransactionTool\BitcoinTransactionTool.csproj", "{0BD41339-E736-48B1-9BA4-64DB464E954D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroestlcoinTransactionTool", "BitcoinTransactionTool\GroestlcoinTransactionTool.csproj", "{0BD41339-E736-48B1-9BA4-64DB464E954D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrary", "CommonLibrary\CommonLibrary.csproj", "{3C4402E4-D931-4996-86FB-55FF6F9E7EBD}"
 EndProject
@@ -24,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EE8C02F5-810E-403E-BC5C-D35F23821FE4}
 	EndGlobalSection
 EndGlobal

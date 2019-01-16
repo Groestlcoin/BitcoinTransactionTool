@@ -21,7 +21,7 @@ namespace BitcoinTransactionTool.Models
 
     public class SendingAddress : BitcoinAddress
     {
-        private ulong balanceSatoshi;
+        private ulong balanceSatoshi = 0;
         public ulong BalanceSatoshi
         {
             get { return balanceSatoshi; }
