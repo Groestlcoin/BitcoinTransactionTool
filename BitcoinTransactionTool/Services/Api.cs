@@ -5,41 +5,29 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace BitcoinTransactionTool.Services
-{
-    public enum TxApiNames
-    {
+namespace BitcoinTransactionTool.Services {
+    public enum TxApiNames {
         BlockCypher,
         Chainz,
     }
 
-    public abstract class Api
-    {
-        protected async Task<Response<JObject>> SendApiRequestAsync(string url)
-        {
+    public abstract class Api {
+        protected async Task<Response<JObject>> SendApiRequestAsync(string url) {
             Response<JObject> resp = new Response<JObject>();
-            using (HttpClient client = new HttpClient())
-            {
-                try
-                {
+            using (HttpClient client = new HttpClient()) {
+                try {
                     string result = await client.GetStringAsync(url);
-                    if (result.StartsWith("["))
-                    {
-                        resp.Result = new JObject
-                        {
-                            { "Result", JArray.Parse(result) }
-                        };
+                    if (result.StartsWith("[")) {
+                        resp.Result = new JObject {
+                                                      {"Result", JArray.Parse(result)}
+                                                  };
                     }
-                    else
-                    {
+                    else {
                         resp.Result = JObject.Parse(result);
                     }
                 }
-                catch (Exception ex)
-                {
-                    string errMsg = (ex.InnerException == null) ?
-                        ex.Message :
-                        ex.Message + Environment.NewLine + ex.InnerException.Message;
+                catch (Exception ex) {
+                    string errMsg = (ex.InnerException == null) ? ex.Message : ex.Message + Environment.NewLine + ex.InnerException.Message;
                     resp.Errors.Add(errMsg);
                 }
             }
@@ -47,8 +35,7 @@ namespace BitcoinTransactionTool.Services
         }
     }
 
-    public abstract class TransactionApi : Api
-    {
+    public abstract class TransactionApi : Api {
         public abstract Task<Response<List<UTXO>>> GetUTXO(List<SendingAddress> addrList);
     }
 }

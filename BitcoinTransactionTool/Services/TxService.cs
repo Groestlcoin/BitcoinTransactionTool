@@ -7,6 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using NBitcoin;
+using NBitcoin.Altcoins;
+using Transaction = CommonLibrary.Transaction.Transaction;
+using TxIn = CommonLibrary.Transaction.TxIn;
+using TxOut = CommonLibrary.Transaction.TxOut;
 
 namespace BitcoinTransactionTool.Services {
     public enum WalletType {
@@ -16,6 +21,27 @@ namespace BitcoinTransactionTool.Services {
     }
 
     public class TxService {
+        public static string CreateRawTx(List<UTXO> txToSpend, List<ReceivingAddress> receiveAddr) {
+            var received = NBitcoin.Transaction.Create(NBitcoin.Altcoins.Groestlcoin.Instance.Mainnet);
+
+            foreach (var address in receiveAddr) {
+                received.Outputs.Add(new NBitcoin.TxOut(Money.Coins(address.Payment), NBitcoin.BitcoinAddress.Create(address.Address.Trim(), Network.GetNetwork("groestl-main")).ScriptPubKey));
+            }
+
+            var coin = received.Outputs.AsCoins();
+            var transactionBuilder = Groestlcoin.Instance.Mainnet.CreateTransactionBuilder().AddCoins(coin);
+
+
+            NBitcoin.Transaction unsigned;
+            foreach (var c in coin) {
+                transactionBuilder.Send(c.ScriptPubKey, c.Amount);
+            }
+
+            unsigned = transactionBuilder.BuildTransaction(false);
+
+            return unsigned.ToHex();
+        }
+
         /// <summary>
         /// Makes ScriptSig based on wallet type.
         /// <para/> INCOMPLETE!

@@ -284,7 +284,15 @@ namespace BitcoinTransactionTool.ViewModels {
             // param is of type System.Windows.Controls.SelectedItemCollection
             IList utxo = (IList) param;
             //RawTx = Transaction.CreateRawTx(utxo.Cast<UTXO>().ToList(), ReceiveList.ToList(), LockTime, SelectedWalletType);
-            RawTx = TxService.CreateRawTx(TxVersion, utxo.Cast<UTXO>().ToList(), ReceiveList.ToList(), LockTime, SelectedWalletType);
+
+            //var received = Transaction.Create(Config.Network);
+            //received.Outputs.Add(new TxOut(Money.Coins(1.0M), addresses.FirstOrDefault().ScriptPubKey));
+
+            //var transactionBuilder = Config.Network.CreateTransactionBuilder();
+            //var coin = received.Outputs.AsCoins().First();
+            //Transaction unsigned = transactionBuilder.AddCoins(coin).Send(addresses.FirstOrDefault().GetScriptAddress(), Money.Coins(1.0M)).BuildTransaction(false);
+            RawTx = TxService.CreateRawTx(utxo.Cast<UTXO>().ToList(), ReceiveList.ToList());
+            //RawTx = TxService.CreateRawTx(TxVersion, utxo.Cast<UTXO>().ToList(), ReceiveList.ToList(), LockTime, SelectedWalletType);
         }
 
         private bool CanMakeTx() {
