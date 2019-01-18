@@ -31,15 +31,17 @@ namespace BitcoinTransactionTool.Services {
             var coin = received.Outputs.AsCoins();
             var transactionBuilder = Groestlcoin.Instance.Mainnet.CreateTransactionBuilder().AddCoins(coin);
 
-
             NBitcoin.Transaction unsigned;
             foreach (var c in coin) {
                 transactionBuilder.Send(c.ScriptPubKey, c.Amount);
             }
 
             unsigned = transactionBuilder.BuildTransaction(false);
-
             return unsigned.ToHex();
+        }
+
+        public static NBitcoin.Transaction GetTransactionFromHex(string hex) {
+            return NBitcoin.Transaction.Parse(hex, Groestlcoin.Instance.Mainnet);
         }
 
         /// <summary>
