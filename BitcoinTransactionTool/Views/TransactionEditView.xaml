@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:vm="clr-namespace:BitcoinTransactionTool.ViewModels"
              mc:Ignorable="d" Width="626" FontSize="14" Height="444">
     <Grid>
         <TextBox Text="{Binding RawTx, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="59" Margin="10,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="522" VerticalScrollBarVisibility="Visible"/>
@@ -27,15 +26,15 @@
 
         <DataGrid HorizontalAlignment="Left" Margin="10,153,0,0" VerticalAlignment="Top" Height="104" Width="602" ItemsSource="{Binding Trx.Inputs}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="TxId" Width="485" Binding="{Binding Outpoint.TxId}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="TxId" Width="485" Binding="{Binding PrevOut.Hash}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Sequence" Width="90" Binding="{Binding Sequence}"/>
             </DataGrid.Columns>
         </DataGrid>
         <TextBox Text="{Binding RawTx2}"  HorizontalAlignment="Left" Height="59" Margin="10,371,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="522" VerticalScrollBarVisibility="Visible"/>
-        <DataGrid HorizontalAlignment="Left" Margin="10,262,0,0" VerticalAlignment="Top" Height="104" Width="602" ItemsSource="{Binding ReceiveList, Mode=TwoWay}" AutoGenerateColumns="False">
+        <DataGrid HorizontalAlignment="Left" Margin="10,262,0,0" VerticalAlignment="Top" Height="104" Width="602" ItemsSource="{Binding ReceiveList, Mode=OneWay}" AutoGenerateColumns="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Receiving Address" Width="485" Binding="{Binding ScriptPubKey, Mode=TwoWay}"/>
-                <DataGridTextColumn Header="Payment" Width="90" Binding="{Binding Value, Mode=TwoWay, StringFormat=\{0:F8\}}"/>
+                <DataGridTextColumn Header="Receiving Address" Width="485" Binding="{Binding PubKey, Mode=OneWay}"/>
+                <DataGridTextColumn Header="Payment" Width="90" Binding="{Binding Value, Mode=OneWay, StringFormat=\{0:F8\}}"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Make Tx" Command="{Binding MakeTxCommand, Mode=OneWay}" HorizontalAlignment="Left" Margin="537,405,0,0" VerticalAlignment="Top" Width="75"/>

@@ -5,12 +5,15 @@ using CommonLibrary.CryptoEncoders;
 using CommonLibrary.Extensions;
 using CommonLibrary.Transaction;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using NBitcoin;
+using Newtonsoft.Json;
 using Transaction = CommonLibrary.Transaction.Transaction;
 using TxIn = CommonLibrary.Transaction.TxIn;
 using TxOut = CommonLibrary.Transaction.TxOut;
@@ -61,10 +64,10 @@ namespace BitcoinTransactionTool.ViewModels {
             set { SetField(ref trx, value); }
         }
 
-        private BindingList<NBitcoin.TxOut> receiveList;
+        private BindingList<NBitcoin.TxOuts> receiveList;
 
-        public BindingList<NBitcoin.TxOut> ReceiveList {
-            get { return receiveList ?? new BindingList<NBitcoin.TxOut>(); }
+        public BindingList<NBitcoin.TxOuts> ReceiveList {
+            get { return receiveList ?? new BindingList<NBitcoin.TxOuts>(); }
             set { SetField(ref receiveList, value); }
         }
 
@@ -77,7 +80,12 @@ namespace BitcoinTransactionTool.ViewModels {
         private void DecodeTx() {
             try {
                 Trx = TxService.GetTransactionFromHex(rawTx);
-                ReceiveList = new BindingList<NBitcoin.TxOut>(Trx.Outputs.Select(x => new NBitcoin.TxOut(x.Value, x.ScriptPubKey)).ToArray());
+                
+                var txs = new TxOutLists();
+                foreach (var txOut in Trx.Outputs) {
+                    txs.TxOuts.Add(new TxOuts {ScriptPubKey = txOut.ScriptPubKey, Value = txOut.Value});
+                }
+                ReceiveList = new BindingList<NBitcoin.TxOuts>(txs.TxOuts.ToArray());
             }
             catch (Exception ex) {
                 MessageBox.Show(ex.Message);
@@ -87,6 +95,9 @@ namespace BitcoinTransactionTool.ViewModels {
         public RelayCommand MakeTxCommand { get; private set; }
 
         private void MakeTx() {
+            var Utxo = new UTXO();
+            
+        //    RawTx = TxService.CreateRawTx(Trx.Inputs .Cast<UTXO>().ToList(), ReceiveList.ToList());
             //ToDo: Not sure what this does, presumably re-makes the transaction but commenting out for now
             //Transaction tx = new Transaction(
             //    trx.Version,
@@ -109,4 +120,3 @@ namespace BitcoinTransactionTool.ViewModels {
         }
     }
 }
-

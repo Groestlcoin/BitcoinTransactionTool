@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:BitcoinTransactionTool.ViewModels"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
-        
+        Background="{StaticResource SecondaryBackgroundBrush}"
         Title="Bitcoin Transaction Tool - Version Beta" Height="666" Width="673.164" FontSize="14" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
@@ -46,7 +46,7 @@
         <Label Content="LockTime:" HorizontalAlignment="Left" Margin="449,110,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontWeight="Bold"/>
         <TextBox Text="{Binding LockTime, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="537,112,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105"/>
 
-        <ListView x:Name="listView" HorizontalAlignment="Left" Height="190" Margin="10,149,0,0" VerticalAlignment="Top" Width="632" ItemsSource="{Binding Source={StaticResource AddressViewSource}}" SelectionMode="Multiple">
+        <ListView x:Name="listView" Style="{StaticResource MaterialDesignListView}" HorizontalAlignment="Left" Height="190" Margin="10,149,0,0" VerticalAlignment="Top" Width="632" ItemsSource="{Binding Source={StaticResource AddressViewSource}}" SelectionMode="Multiple">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction CommandParameter="{Binding ElementName=listView, Path=SelectedItems}" Command="{Binding SelectionChangedCommand}" />

@@ -37,6 +37,12 @@ namespace BitcoinTransactionTool.Services {
             }
 
             unsigned = transactionBuilder.BuildTransaction(false);
+
+            foreach (var input in txToSpend) {
+                received.Inputs.Add(new OutPoint(unsigned.GetHash(), input.OutIndex));
+                
+            }
+
             return unsigned.ToHex();
         }
 
