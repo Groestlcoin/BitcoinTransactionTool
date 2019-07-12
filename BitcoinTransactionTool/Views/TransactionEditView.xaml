@@ -7,21 +7,21 @@
     <Grid>
         <TextBox Text="{Binding RawTx, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="59" Margin="10,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="522" VerticalScrollBarVisibility="Visible"/>
 
-        <Button Content="Decode Tx" HorizontalAlignment="Left" Margin="537,43,0,0" VerticalAlignment="Top" Width="75" Command="{Binding DecodeTxCommand, Mode=OneWay}" Height="59"/>
+        <Button Content="Decode Tx" HorizontalAlignment="Left" Margin="537,43,0,0" VerticalAlignment="Top" Width="75" Command="{Binding DecodeTxCommand, Mode=OneWay}" Height="59" Padding="2px"/>
 
-        <Label Content="Tx Id:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+        <Label Content="Tx Id:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"  FontWeight="Bold"/>
         <TextBox Text="{Binding BTx.TxId}"  HorizontalAlignment="Left" Height="26" Margin="71,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="461"/>
 
-        <Label Content="Version:" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+        <Label Content="Version:" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top"  FontWeight="Bold"/>
         <TextBox Text="{Binding Trx.Version, UpdateSourceTrigger=PropertyChanged}" Height="25" Width="50" HorizontalAlignment="Left" Margin="81,107,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
-        <Label Content="Tx Status:" HorizontalAlignment="Left" Margin="142,104,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+        <Label Content="Tx Status:" HorizontalAlignment="Left" Margin="142,104,0,0" VerticalAlignment="Top"  FontWeight="Bold"/>
         <TextBox Text="{Binding Trx.Status}" Height="25" Width="70" HorizontalAlignment="Left" Margin="232,107,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" />
 
-        <Label Content="Lock Time:" HorizontalAlignment="Left" Margin="313,104,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+        <Label Content="Lock Time:" HorizontalAlignment="Left" Margin="313,104,0,0" VerticalAlignment="Top"  FontWeight="Bold"/>
         <TextBox Text="{Binding Trx.LockTime, UpdateSourceTrigger=PropertyChanged}" Height="25" Width="70" HorizontalAlignment="Left" Margin="402,107,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
 
-        <Label Content="RBF:" HorizontalAlignment="Left" Margin="490,104,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+        <Label Content="RBF:" HorizontalAlignment="Left" Margin="490,104,0,0" VerticalAlignment="Top"  FontWeight="Bold"/>
         <TextBox Text="{Binding Trx.IsRbf, Mode=OneWay}" Height="25" Width="70" HorizontalAlignment="Left" Margin="537,107,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" />
 
         <DataGrid HorizontalAlignment="Left" Margin="10,153,0,0" VerticalAlignment="Top" Height="104" Width="602" ItemsSource="{Binding Trx.Inputs}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible">
@@ -37,7 +37,7 @@
                 <DataGridTextColumn Header="Payment" Width="90" Binding="{Binding Value, Mode=OneWay, StringFormat=\{0:F8\}}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Make Tx" Command="{Binding MakeTxCommand, Mode=OneWay}" HorizontalAlignment="Left" Margin="537,405,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Make Tx" Command="{Binding MakeTxCommand, Mode=OneWay}" HorizontalAlignment="Left" Margin="537,405,0,0" VerticalAlignment="Top" Width="75" FontSize="12" Padding="2px"/>
         <ComboBox HorizontalAlignment="Left" Margin="537,371,0,0" VerticalAlignment="Top" Width="75" ItemsSource="{Binding WalletTypeList}" SelectedItem="{Binding SelectedWalletType}"/>
 
     </Grid>
