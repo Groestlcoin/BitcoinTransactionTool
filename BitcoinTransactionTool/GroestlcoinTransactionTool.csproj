@@ -89,6 +89,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MainWindow - Copy.xaml.cs">
+      <DependentUpon>MainWindow - Copy.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\BitcoinAddress.cs" />
     <Compile Include="Models\OutPointModel.cs" />
     <Compile Include="Models\TxInModel.cs" />
@@ -124,6 +127,10 @@
     <Compile Include="Views\TxJsonWindow.xaml.cs">
       <DependentUpon>TxJsonWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="MainWindow - Copy.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -194,6 +201,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="GrsIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="GrsTxnTool.png" />
+    <Content Include="GrsTxnTool.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

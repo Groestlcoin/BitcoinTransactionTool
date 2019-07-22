@@ -117,18 +117,8 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <TextBlock HorizontalAlignment="Left"  Grid.Row="5" Grid.Column="1" TextWrapping="Wrap" Text="Size:" VerticalAlignment="Top" FontWeight="Bold"/>
-        <TextBlock HorizontalAlignment="Left"  Grid.Row="5" Grid.Column="2" TextWrapping="Wrap" Text="{Binding TransactionSize, Mode=OneWay}" VerticalAlignment="Top" ToolTip="Estimated final transaction size in Bytes"/>
-        <TextBlock HorizontalAlignment="Left"  Grid.Row="6" Grid.Column="1" TextWrapping="Wrap" Text="Count:" VerticalAlignment="Top" FontWeight="Bold"/>
-        <TextBlock HorizontalAlignment="Left"  Grid.Row="6" Grid.Column="2" TextWrapping="Wrap" Text="{Binding SelectedUTXOs.Count, Mode=OneWay}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left"  Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" Text="Balance Sum:" VerticalAlignment="Top" FontWeight="Bold"/>
-        <TextBlock HorizontalAlignment="Left"  Grid.Row="7" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding TotalBalance, Mode=OneWay, StringFormat=\{0:F8\}}"/>
-        <TextBlock HorizontalAlignment="Left"  Grid.Row="8" Grid.Column="1" TextWrapping="Wrap" Text="Selected Sum:" VerticalAlignment="Top" FontWeight="Bold"/>
-        <TextBlock HorizontalAlignment="Left"  Grid.Row="8" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding TotalSelectedBalance, Mode=OneWay, StringFormat=\{0:F8\}}"/>
-        <TextBlock HorizontalAlignment="Left"  Grid.Row="9" Grid.Column="1" TextWrapping="Wrap" Text="To Send:" VerticalAlignment="Top" FontWeight="Bold"/>
-        <TextBlock HorizontalAlignment="Left"  Grid.Row="9" Grid.Column="2" TextWrapping="Wrap" Text="{Binding TotalToSend, Mode=OneWay, StringFormat=\{0:F8\}}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left"  Grid.Row="10" Grid.Column="1" TextWrapping="Wrap" Text="Fee:" VerticalAlignment="Top" FontWeight="Bold"/>
-        <TextBlock HorizontalAlignment="Left"  Grid.Row="10" Grid.Column="2" TextWrapping="Wrap" Text="{Binding Fee, Mode=OneWay, StringFormat=\{0:F8\}}" VerticalAlignment="Top" ToolTip="{Binding FeePerByte, Mode=OneWay}"/>
+        <TextBlock HorizontalAlignment="Left" Grid.Row="10" Grid.Column="1" TextWrapping="Wrap" Text="Fee:" VerticalAlignment="Top" FontWeight="Bold"/>
+        <TextBlock HorizontalAlignment="Left" Grid.Row="10" Grid.Column="2" TextWrapping="Wrap" Text="{Binding Fee, Mode=OneWay, StringFormat=\{0:F8\}}" VerticalAlignment="Top" ToolTip="{Binding FeePerByte, Mode=OneWay}"/>
 
         <TextBox Text="{Binding RawTx, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="85" Margin="10,486,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="444" VerticalScrollBarVisibility="Visible"/>
 
