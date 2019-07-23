@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Navigation;
 
 namespace BitcoinTransactionTool.ViewModels {
     public class MainWindowViewModel : ViewModelBase {
@@ -27,6 +28,7 @@ namespace BitcoinTransactionTool.ViewModels {
             CopyTxCommand = new RelayCommand(CopyTx, () => !string.IsNullOrEmpty(RawTx));
             ShowQrWindowCommand = new RelayCommand(ShowQrWindow, () => !string.IsNullOrEmpty(RawTx));
             ShowJsonWindowCommand = new RelayCommand(ShowJsonWindow, () => !string.IsNullOrEmpty(RawTx));
+            ChangeAddressCheckedCommand = new BindableCommand(ChangeAddressChecked, () => IsChangeAddrEnabled);
             ShowEditWindowCommand = new RelayCommand(ShowEditWindow);
 
             // These moved below to avoid throwing null exception.
@@ -52,6 +54,13 @@ namespace BitcoinTransactionTool.ViewModels {
 
         private bool isReceiving;
 
+        public bool IsChangeAddrEnabled {
+            get { return isChangeAddrEnabled; }
+            set { SetField(ref isChangeAddrEnabled, value); }
+        }
+
+        private bool isChangeAddrEnabled;
+
         /// <summary>
         /// List of Api services used for receiving Unconfirmed Transaction Outputs (UTXO)
         /// </summary>
@@ -66,6 +75,16 @@ namespace BitcoinTransactionTool.ViewModels {
         }
 
         private TxApiNames selectedApi;
+
+        public SendingAddress SelectedChangeAddress {
+            get => selectedChangeAddress;
+            set {
+                SetField(ref selectedChangeAddress, value);
+                RaisePropertyChanged(nameof(Fee));
+            }
+        }
+
+        private SendingAddress selectedChangeAddress;
 
         /// <summary>
         /// List of Bitcoin Addresses to receive their UTXOs and use for spending.
@@ -139,22 +158,18 @@ namespace BitcoinTransactionTool.ViewModels {
         /// </summary>
         [DependsOnProperty(nameof(TotalSelectedBalance), nameof(TotalToSend))]
         public decimal Fee {
-            get { return TotalSelectedBalance - TotalToSend; }
-        }
-
-        /// <summary>
-        /// Amount of fee in satoshi per byte based on estimated transaction size and fee amount.
-        /// </summary>
-        [DependsOnProperty(nameof(TransactionSize), nameof(Fee))]
-        public string FeePerByte {
             get {
-                long size = 0;
                 if (TransactionSize != 0) {
-                    size = (int) 1; //;(Fee * BitcoinConversions.Satoshi) * TransactionSize;
+                    if (SelectedChangeAddress != null) {
+                        return ((decimal)0.002);
+                    }
+                    return TotalSelectedBalance - TotalToSend;
+
                 }
-                return string.Format($"{size} satoshi/byte");
+                return 0;
             }
         }
+
 
         /// <summary>
         /// List of selected UTXOs, these are the ones that will be spent.
@@ -176,9 +191,8 @@ namespace BitcoinTransactionTool.ViewModels {
         public BindingList<ReceivingAddress> ReceiveList { get; set; }
 
         void ReceiveList_ListChanged(object sender, ListChangedEventArgs e) {
-            RaisePropertyChanged("FeePerByte");
-            RaisePropertyChanged("TotalToSend");
-            RaisePropertyChanged("TransactionSize");
+            RaisePropertyChanged(nameof(TotalToSend));
+            RaisePropertyChanged(nameof(TransactionSize));
 
             MakeTxCommand.RaiseCanExecuteChanged();
         }
@@ -225,8 +239,9 @@ namespace BitcoinTransactionTool.ViewModels {
 
         private void SelectionChanged(object param) {
             // param is of type System.Windows.Controls.SelectedItemCollection
-            IList utxo = (IList) param;
+            IList utxo = (IList)param;
             SelectedUTXOs = new ObservableCollection<UTXO>(utxo.Cast<UTXO>().ToList());
+            RaisePropertyChanged(nameof(Fee));
         }
 
         /// <summary>
@@ -244,9 +259,6 @@ namespace BitcoinTransactionTool.ViewModels {
                 case TxApiNames.Chainz:
                     api = new Services.TransactionServices.Chainz();
                     break;
-                case TxApiNames.BlockCypher:
-                    api = new Services.TransactionServices.BlockCypher();
-                    break;
                 default:
                     api = new Services.TransactionServices.Chainz();
                     break;
@@ -258,14 +270,16 @@ namespace BitcoinTransactionTool.ViewModels {
                     addr.BalanceSatoshi = 0;
 
                     foreach (var utxo in UtxoList) {
-                        if (utxo.Address == addr.Address) {
-                            addr.BalanceSatoshi = utxo.Amount;
+                        if (utxo.Address.Trim() == addr.Address.Trim()) {
+                            addr.BalanceSatoshi += utxo.Amount;
                         }
                     }
                     //UtxoList.ToList().ForEach(x => addr.BalanceSatoshi += (x.Address == addr.Address) ? x.Amount : 0);
                     RaisePropertyChanged(nameof(TotalBalance));
                 }
                 Status = "Finished successfully.";
+                IsChangeAddrEnabled = true;
+                ChangeAddressCheckedCommand.RaiseCanExecuteChanged();
             }
             else {
                 Status = "Encountered an error!";
@@ -282,7 +296,15 @@ namespace BitcoinTransactionTool.ViewModels {
 
         private void MakeTx(object param) {
             // param is of type System.Windows.Controls.SelectedItemCollection
-            IList utxo = (IList) param;
+            IList utxo = (IList)param;
+
+            if (SelectedChangeAddress != null && TotalSelectedBalance - TotalToSend > 0) {
+                var receivingAddr = new ReceivingAddress();
+                receivingAddr.Address = SelectedChangeAddress.Address;
+                receivingAddr.Payment = TotalSelectedBalance - TotalToSend - (decimal)0.002;
+                ReceiveList.Add(receivingAddr);
+            }
+
             RawTx = TxService.CreateRawTx(utxo.Cast<UTXO>().ToList(), ReceiveList.ToList());
         }
 
@@ -310,6 +332,15 @@ namespace BitcoinTransactionTool.ViewModels {
             vm.QRCode = TransactionQR.Build(RawTx);
             winManager = new QrWinManager();
             winManager.Show(vm);
+        }
+
+        public BindableCommand ChangeAddressCheckedCommand { get; }
+
+        private void ChangeAddressChecked(object isChecked) {
+            var c = (bool?)isChecked;
+
+            SelectedChangeAddress = c != true ? null : SendAddressList.FirstOrDefault();
+            RaisePropertyChanged(nameof(SelectedChangeAddress));
         }
 
         /// <summary>

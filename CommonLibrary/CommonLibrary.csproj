@@ -34,14 +34,14 @@
     <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.1.0.2\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="NBitcoin, Version=4.1.1.77, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NBitcoin.4.1.1.77\lib\net452\NBitcoin.dll</HintPath>
+    <Reference Include="NBitcoin, Version=4.1.2.38, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NBitcoin.4.1.2.38\lib\net452\NBitcoin.dll</HintPath>
     </Reference>
-    <Reference Include="NBitcoin.Altcoins, Version=1.0.1.34, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NBitcoin.Altcoins.1.0.1.34\lib\net452\NBitcoin.Altcoins.dll</HintPath>
+    <Reference Include="NBitcoin.Altcoins, Version=1.0.2.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NBitcoin.Altcoins.1.0.2.8\lib\net452\NBitcoin.Altcoins.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
@@ -83,6 +83,7 @@
     <Compile Include="ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

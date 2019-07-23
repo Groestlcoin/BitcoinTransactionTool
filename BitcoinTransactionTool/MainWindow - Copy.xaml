@@ -5,8 +5,9 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:svg="Mntone.SvgForXaml.UI.Xaml"
+        xmlns:converters="clr-namespace:BitcoinTransactionTool.Converters"
         Background="{StaticResource SecondaryBackgroundBrush}"
-        Title="Bitcoin Transaction Tool - Version Beta" Height="728" Width="1000" FontSize="14" ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
+        Title="Groestlcoin Transaction Tool - Version Beta" Height="728" Width="1000" FontSize="14" ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -16,6 +17,7 @@
                 <PropertyGroupDescription PropertyName="Address" />
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
+        <converters:ColorConverter x:Key="ColorConverter"></converters:ColorConverter>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="F2" Command="{Binding ShowEditWindowCommand}"/>
@@ -33,11 +35,12 @@
             <RowDefinition Height="0.07*"/>
             <RowDefinition Height="0.07*"/>
             <RowDefinition Height="0.04*"/>
-            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="0.34*"/>
+            <RowDefinition Height="0.01*"/>
             <RowDefinition Height="0.2*"/>
-            <RowDefinition Height="0.07*"/>
-            <RowDefinition Height="0.04*"/>
-            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.10*"/>
+            <RowDefinition Height="0.01*"/>
+            <RowDefinition Height="0.05*"/>
         </Grid.RowDefinitions>
         <Menu VerticalAlignment="Top" FontSize="14" Grid.ColumnSpan="4" Grid.Row="0" Height="25px" Padding="2">
             <MenuItem Header="_Tools" Height="20px">
@@ -57,76 +60,128 @@
                 <DataGridTextColumn Header="Balance" MinWidth="90" Binding="{Binding Balance, Mode=OneWay, StringFormat=\{0:F8\}}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <ComboBox Grid.Column="3" Grid.Row="1" HorizontalAlignment="Center" Foreground="White"  Style="{StaticResource MaterialDesignComboBox}" VerticalAlignment="Top" Width="150" ItemsSource="{Binding ApiList}" Height="32" SelectedItem="{Binding SelectedApi}" VerticalContentAlignment="Center"/>
+        <ComboBox Grid.Column="3" Grid.Row="1" HorizontalAlignment="Center" Foreground="{StaticResource ForegroundBrush}"  Style="{StaticResource MaterialDesignComboBox}" VerticalAlignment="Top" Width="150" ItemsSource="{Binding ApiList}" Height="32" SelectedItem="{Binding SelectedApi}" VerticalContentAlignment="Center"/>
         <Button Content="Get UTXOs" HorizontalAlignment="Center" Grid.Column="3" Grid.Row="4" VerticalAlignment="Top" Width="150" Height="32" Command="{Binding GetUTXOCommand, Mode=OneWay}" Padding="2px"/>
-        <ListView HorizontalAlignment="Stretch" Grid.Row="5" Grid.ColumnSpan="4" Grid.Column="0" VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource AddressViewSource}}" SelectionMode="Multiple">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction CommandParameter="{Binding ElementName=listView, Path=SelectedItems}" Command="{Binding SelectionChangedCommand}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn  Header="Confirmation" DisplayMemberBinding="{Binding Confirmation}"/>
-                    <GridViewColumn Header="Amount" Width="200" DisplayMemberBinding="{Binding AmountBitcoin}"/>
-                    <GridViewColumn Header="Hash" Width="700" DisplayMemberBinding="{Binding TxHash}"/>
-                </GridView>
-            </ListView.View>
-            <ListView.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.ContainerStyle>
-                        <Style TargetType="{x:Type GroupItem}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <Expander Style="{StaticResource MaterialDesignExpander}" IsExpanded="True">
-                                            <Expander.Header>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="Gray" FontSize="18" VerticalAlignment="Bottom" />
-                                                    <TextBlock Text="{Binding ItemCount}" FontSize="18" Foreground="Green" FontWeight="Bold" FontStyle="Italic" Margin="10,0,0,0" VerticalAlignment="Bottom" />
-                                                    <TextBlock Text=" UTXO(s)" FontSize="18" Foreground="Silver" FontStyle="Italic" VerticalAlignment="Bottom" />
-                                                </StackPanel>
-                                            </Expander.Header>
-                                            <ItemsPresenter />
-                                        </Expander>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </GroupStyle.ContainerStyle>
-                </GroupStyle>
-            </ListView.GroupStyle>
-        </ListView>
-
-        <DataGrid Margin="5 0 5 0" HorizontalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="6" VerticalAlignment="Stretch" ItemsSource="{Binding ReceiveList}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible">
+            <ListView Grid.Row="5" Grid.ColumnSpan="4" Grid.Column="0" VerticalAlignment="Stretch" VerticalContentAlignment="Top" Name="UxListView" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource AddressViewSource}}" SelectionMode="Multiple">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction CommandParameter="{Binding ElementName=UxListView, Path=SelectedItems}" Command="{Binding SelectionChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListView.View>
+                    <GridView ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <GridViewColumn  Header="Confirmation" Width="125" DisplayMemberBinding="{Binding Confirmation}"/>
+                        <GridViewColumn Header="Amount" Width="175" DisplayMemberBinding="{Binding AmountBitcoin}"/>
+                        <GridViewColumn Header="Hash" DisplayMemberBinding="{Binding TxHash}"/>
+                    </GridView>
+                </ListView.View>
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Expander Style="{StaticResource MaterialDesignExpander}" IsExpanded="True">
+                                                <Expander.Header>
+                                                    <StackPanel Orientation="Horizontal" CanVerticallyScroll="True">
+                                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="Gray" FontSize="18" VerticalAlignment="Bottom" />
+                                                        <TextBlock Text="{Binding ItemCount}" FontSize="18" Foreground="Green" FontWeight="Bold" FontStyle="Italic" Margin="10,0,0,0" VerticalAlignment="Bottom" />
+                                                        <TextBlock Text=" UTXO(s)" FontSize="18" Foreground="Silver" FontStyle="Italic" VerticalAlignment="Bottom" />
+                                                    </StackPanel>
+                                                </Expander.Header>
+                                                <ItemsPresenter />
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ListView.GroupStyle>
+            </ListView>
+        <DataGrid Margin="5 0 5 0" HorizontalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="7" VerticalAlignment="Stretch" ItemsSource="{Binding ReceiveList}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Receiving Address" Binding="{Binding Address, Mode=TwoWay}"/>
                 <DataGridTextColumn Header="Payment" Binding="{Binding Payment, Mode=TwoWay, StringFormat=\{0:F8\}}"/>
             </DataGrid.Columns>
         </DataGrid>
-            <Grid Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" Grid.Row="7" Grid.ColumnSpan="4" Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" HorizontalAlignment="Center" Margin="30 0 30 0">
-                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource ForegroundBrush}" Text="Balance Sum:" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBlock HorizontalAlignment="Center" FontSize="24px" Foreground="White" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding TotalBalance, Mode=OneWay, StringFormat=\{0:F8\}}"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="30 0 30 0">
-                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource ForegroundBrush}" Text="Selected Balance:" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBlock HorizontalAlignment="Center"  FontSize="24px" Foreground="White" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding TotalSelectedBalance, Mode=OneWay, StringFormat=\{0:F8\}}"/>
-                </StackPanel>
-                <StackPanel Grid.Column="2" HorizontalAlignment="Center" Margin="30 0 30 0">
-                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource ForegroundBrush}" Text="To Send:" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBlock HorizontalAlignment="Center" FontSize="24px" Foreground="White" TextWrapping="Wrap" Text="{Binding TotalToSend, Mode=OneWay, StringFormat=\{0:F8\}}" VerticalAlignment="Top"/>
-                </StackPanel>
-                <StackPanel Grid.Column="3" HorizontalAlignment="Center" Margin="30 0 30 0">
-                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource ForegroundBrush}" Text="Fee:" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBlock HorizontalAlignment="Center" FontSize="24px" Foreground="White" TextWrapping="Wrap" Text="{Binding Fee, Mode=OneWay, StringFormat=\{0:F8\}}" VerticalAlignment="Top" ToolTip="{Binding FeePerByte, Mode=OneWay}"/>
-                </StackPanel>
-            </Grid>
+        <Grid Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" Grid.Row="8" Grid.ColumnSpan="4" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" HorizontalAlignment="Center" Margin="30 0 30 0">
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource ForegroundBrush}" Text="Total Balance:" VerticalAlignment="Top" FontWeight="Bold"/>
+                <TextBlock HorizontalAlignment="Center" FontSize="20px" Foreground="White" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding TotalBalance, Mode=OneWay, StringFormat=\{0:F8\}}"/>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource ForegroundBrush}" Text="GRS" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="30 0 30 0">
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource ForegroundBrush}" Text="Selected Balance:" VerticalAlignment="Top" FontWeight="Bold"/>
+                <TextBlock HorizontalAlignment="Center"  FontSize="20px" Foreground="White" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding TotalSelectedBalance, Mode=OneWay, StringFormat=\{0:F8\}}"/>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource ForegroundBrush}" Text="GRS" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Center" Margin="30 0 30 0">
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource ForegroundBrush}" Text="Sending:" VerticalAlignment="Top" FontWeight="Bold"/>
+                <TextBlock HorizontalAlignment="Center" FontSize="20px" Foreground="White" TextWrapping="Wrap" Text="{Binding TotalToSend, Mode=OneWay, StringFormat=\{0:F8\}}" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource ForegroundBrush}" Text="GRS" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel Grid.Column="3" HorizontalAlignment="Center" Margin="30 0 30 0">
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource ForegroundBrush}" Text="Fee:" VerticalAlignment="Top" FontWeight="Bold"/>
+                <TextBlock HorizontalAlignment="Center" FontSize="20px" Foreground="{Binding Converter={StaticResource ColorConverter}, Path=Fee}" TextWrapping="Wrap" Text="{Binding Fee, Mode=OneWay, StringFormat=\{0:F8\}}" VerticalAlignment="Top" ToolTip="{Binding FeePerByte, Mode=OneWay}"/>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Foreground="{StaticResource ForegroundBrush}" Text="GRS" VerticalAlignment="Top"/>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Column="0" Grid.Row="10" Grid.ColumnSpan="2" VerticalAlignment="Bottom">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                <CheckBox Name="ChangeAddrChk" Style="{StaticResource MaterialDesignCheckBox}" Foreground="{StaticResource ForegroundBrush}" Content="Change Address: " Command="{Binding ChangeAddressCheckedCommand, Mode=OneWay}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}"></CheckBox>
+                <ComboBox Name="ChangeAddrCmbo" IsEditable="False" HorizontalAlignment="Center" Margin="20 0 0 0" Foreground="{StaticResource ForegroundBrush}" MinWidth="300" ItemsSource="{Binding Path=SendAddressList, Mode=TwoWay}" DisplayMemberPath="Address" SelectedIndex="0" SelectedItem="{Binding SelectedChangeAddress}">
+                    <ComboBox.Style>
+                        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignComboBox}">
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsChecked, ElementName=ChangeAddrChk}" Value="True"></Condition>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter  Property="IsEnabled" Value="True"></Setter>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsEnabled, ElementName=ChangeAddrChk}" Value="True"></Condition>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter  Property="IsEnabled" Value="True"></Setter>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsEnabled, ElementName=ChangeAddrChk}" Value="False"></Condition>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter  Property="IsEnabled" Value="False"></Setter>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsChecked, ElementName=ChangeAddrChk}" Value="False"></Condition>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter  Property="IsEnabled" Value="False"></Setter>
+                                </MultiDataTrigger>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=ChangeAddrChk}" Value="False">
+                                    <Setter Property="SelectedIndex" Value="-1"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 5 5">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                <Button Content="QR" Margin="0 0 10 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Padding="2px" Command="{Binding ShowQrWindowCommand, Mode=OneWay}"/>
+                <Button Content="Copy" Margin="10 0 10 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Padding="2px" Command="{Binding CopyTxCommand, Mode=OneWay}"/>
+                <Button Content="JSON" Margin="10 0 10 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Padding="2px" Command="{Binding ShowJsonWindowCommand, Mode=OneWay}"/>
+                <Button Content="Make Transaction" Margin="10 0 0 0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Padding="2px" CommandParameter="{Binding SelectedItems, ElementName=UxListView}" Command="{Binding MakeTxCommand, Mode=OneWay}"/>
+            </StackPanel>
+
+        </StackPanel>
     </Grid>
 </Window>

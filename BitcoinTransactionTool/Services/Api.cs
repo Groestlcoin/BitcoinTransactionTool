@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace BitcoinTransactionTool.Services {
     public enum TxApiNames {
-        BlockCypher,
         Chainz,
     }
 
