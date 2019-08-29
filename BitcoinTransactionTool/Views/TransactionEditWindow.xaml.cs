@@ -23,5 +23,15 @@ namespace BitcoinTransactionTool.Views
         {
             InitializeComponent();
         }
+
+        private void UIElement_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            try {
+                Window.GetWindow(this)?.DragMove();
+            }
+            catch {
+                //Do Nothing
+            }
+            e.Handled = false;
+        }
     }
 }

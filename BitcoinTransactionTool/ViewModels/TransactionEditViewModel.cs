@@ -1,22 +1,13 @@
-﻿using BitcoinTransactionTool.Models;
-using BitcoinTransactionTool.Services;
+﻿using BitcoinTransactionTool.Services;
 using CommonLibrary;
-using CommonLibrary.CryptoEncoders;
-using CommonLibrary.Extensions;
-using CommonLibrary.Transaction;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using NBitcoin;
-using Newtonsoft.Json;
-using Transaction = CommonLibrary.Transaction.Transaction;
-using TxIn = CommonLibrary.Transaction.TxIn;
-using TxOut = CommonLibrary.Transaction.TxOut;
+using NBitcoin.Altcoins;
+using Transaction = NBitcoin.Transaction;
 
 namespace BitcoinTransactionTool.ViewModels {
     /// <summary>
@@ -29,9 +20,7 @@ namespace BitcoinTransactionTool.ViewModels {
         public TransactionEditViewModel() {
             WalletTypeList = new ObservableCollection<WalletType>(Enum.GetValues(typeof(WalletType)).Cast<WalletType>().ToList());
             SelectedWalletType = WalletType.Normal;
-            ReceiveList.ListChanged += ReceiveList_ListChanged;
-            DecodeTxCommand = new RelayCommand(DecodeTx);
-            MakeTxCommand = new RelayCommand(MakeTx, CanMakeTx);
+            DecodeTxCommand = new RelayCommand(DecodeTx, CanDecodeTx);
         }
 
         public ObservableCollection<WalletType> WalletTypeList { get; set; }
@@ -39,84 +28,62 @@ namespace BitcoinTransactionTool.ViewModels {
         private WalletType selectedWalletType;
 
         public WalletType SelectedWalletType {
-            get { return selectedWalletType; }
-            set { SetField(ref selectedWalletType, value); }
+            get => selectedWalletType;
+            set => SetField(ref selectedWalletType, value);
         }
 
         private string rawTx;
 
         public string RawTx {
-            get { return rawTx; }
-            set { SetField(ref rawTx, value); }
-        }
-
-        private string rawTx2;
-
-        public string RawTx2 {
-            get { return rawTx2; }
-            set { SetField(ref rawTx2, value); }
+            get => rawTx;
+            set {
+                SetField(ref rawTx, value);
+                DecodeTxCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private NBitcoin.Transaction trx;
 
         public NBitcoin.Transaction Trx {
-            get { return trx; }
-            set { SetField(ref trx, value); }
+            get => trx;
+            set {
+                SetField(ref trx, value);
+                RaisePropertyChanged(nameof(Inputs));
+                RaisePropertyChanged(nameof(Outputs));
+            }
         }
 
-        private BindingList<NBitcoin.TxOuts> receiveList;
-
-        public BindingList<NBitcoin.TxOuts> ReceiveList {
-            get { return receiveList ?? new BindingList<NBitcoin.TxOuts>(); }
-            set { SetField(ref receiveList, value); }
+        public TxInList Inputs => Trx?.Inputs;
+        public List<TxOutExtended> Outputs {
+            get {
+                List<TxOutExtended> outputs = new List<TxOutExtended>();
+                if (Trx?.Outputs != null) {
+                    foreach (var output in Trx?.Outputs) {
+                        outputs.Add(new TxOutExtended { ScriptPubKey = output.ScriptPubKey, Value = output.Value });
+                    }
+                }
+                return outputs;
+            }
         }
 
-        void ReceiveList_ListChanged(object sender, ListChangedEventArgs e) {
-            MakeTxCommand.RaiseCanExecuteChanged();
+        public class TxOutExtended : NBitcoin.TxOut {
+            public string PubKey => ScriptPubKey.GetDestinationAddress(Groestlcoin.Instance.Mainnet).ToString();
         }
 
         public RelayCommand DecodeTxCommand { get; private set; }
 
         private void DecodeTx() {
             try {
-                Trx = TxService.GetTransactionFromHex(rawTx);
-                
-                var txs = new TxOutLists();
-                foreach (var txOut in Trx.Outputs) {
-                    txs.TxOuts.Add(new TxOuts {ScriptPubKey = txOut.ScriptPubKey, Value = txOut.Value});
-                }
-                ReceiveList = new BindingList<NBitcoin.TxOuts>(txs.TxOuts.ToArray());
+                Trx = Transaction.Parse(RawTx.Trim(), Groestlcoin.Instance.Mainnet);
             }
             catch (Exception ex) {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Unable to decode transaction, the raw transaction might be invalid.");
             }
         }
 
-        public RelayCommand MakeTxCommand { get; private set; }
-
-        private void MakeTx() {
-            var Utxo = new UTXO();
-            
-        //    RawTx = TxService.CreateRawTx(Trx.Inputs .Cast<UTXO>().ToList(), ReceiveList.ToList());
-            //ToDo: Not sure what this does, presumably re-makes the transaction but commenting out for now
-            //Transaction tx = new Transaction(
-            //    trx.Version,
-            //    trx.TxInCount,
-            //    trx.TxInList.Select(x => new TxIn() {
-            //                                            Outpoint = new Outpoint() {Index = x.Outpoint.Index, TxId = x.Outpoint.TxId},
-            //                                            ScriptSig = x.ScriptSig,
-            //                                            ScriptSigLength = new CompactInt(x.ScriptSigLength),
-            //                                            Sequence = x.Sequence
-            //                                        }).ToArray(),
-            //    trx.TxOutCount,
-            //    trx.TxOutList.ToArray(),
-            //    trx.LockTime);
-
-            //RawTx2 = tx.Serialize().ToBase16();
-        }
-
-        private bool CanMakeTx() {
-            return true;
+       
+        private bool CanDecodeTx() {
+            return !string.IsNullOrEmpty(RawTx);
         }
     }
 }

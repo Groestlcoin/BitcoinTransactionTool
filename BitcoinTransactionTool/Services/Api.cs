@@ -18,7 +18,7 @@ namespace BitcoinTransactionTool.Services {
                     string result = await client.GetStringAsync(url);
                     if (result.StartsWith("[")) {
                         resp.Result = new JObject {
-                                                      {"Result", JArray.Parse(result)}
+                                                      { "Result", JArray.Parse(result) }
                                                   };
                     }
                     else {

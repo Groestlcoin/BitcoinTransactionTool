@@ -46,9 +46,6 @@ namespace BitcoinTransactionTool.Services {
             return unsigned.ToHex();
         }
 
-        public static NBitcoin.Transaction GetTransactionFromHex(string hex) {
-            return NBitcoin.Transaction.Parse(hex, Groestlcoin.Instance.Mainnet);
-        }
 
         /// <summary>
         /// Makes ScriptSig based on wallet type.

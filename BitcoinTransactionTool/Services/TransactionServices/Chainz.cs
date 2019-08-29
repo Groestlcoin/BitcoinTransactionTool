@@ -21,12 +21,12 @@ namespace BitcoinTransactionTool.Services.TransactionServices {
             foreach (var item in apiResp.Result["unspent_outputs"]) {
                 UTXO u = new UTXO();
                 string script = item["script"].ToString();
-                u.AddressHash160 = script.Substring("76a914".Length, script.Length - "76a91488ac".Length);
-                u.Address = item["addr"].ToString();
-                u.TxHash = item["tx_hash"].ToString();
+                u.TxHash = item["txid"].ToString();
+                u.OutIndex = (uint) item["vout"];
+
                 u.Amount = (ulong) item["value"];
                 u.Confirmation = (int) item["confirmations"];
-                u.OutIndex = (uint) item["tx_ouput_n"];
+                
                 resp.Result.Add(u);
             }
 

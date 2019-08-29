@@ -87,8 +87,8 @@
     <Compile Include="Converters\NullReplaceConverter.cs" />
     <Compile Include="Converters\EnumerableNullReplaceConverter.cs" />
     <Compile Include="Converters\ColorConverter.cs" />
-    <Compile Include="MainWindow - Copy.xaml.cs">
-      <DependentUpon>MainWindow - Copy.xaml</DependentUpon>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\BitcoinAddress.cs" />
     <Compile Include="Models\OutPointModel.cs" />
@@ -115,6 +115,9 @@
     <Compile Include="Views\QrWindow.xaml.cs">
       <DependentUpon>QrWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Titlebar.xaml.cs">
+      <DependentUpon>Titlebar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TransactionEditView.xaml.cs">
       <DependentUpon>TransactionEditView.xaml</DependentUpon>
     </Compile>
@@ -124,20 +127,12 @@
     <Compile Include="Views\TxJsonWindow.xaml.cs">
       <DependentUpon>TxJsonWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow - Copy.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\QrView.xaml">
@@ -148,9 +143,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TransactionEditView.xaml">
+    <Page Include="Views\Titlebar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TransactionEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\TransactionEditWindow.xaml">
       <SubType>Designer</SubType>
