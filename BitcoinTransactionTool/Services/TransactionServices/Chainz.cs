@@ -9,7 +9,7 @@ namespace BitcoinTransactionTool.Services.TransactionServices {
     public class Chainz : TransactionApi {
         public override async Task<Response<List<UTXO>>> GetUTXO(List<SendingAddress> addrList) {
             Response<List<UTXO>> resp = new Response<List<UTXO>>();
-            //string addresses = string.Join("|", addrList.Select(b => b.Address).ToArray());
+            string addresses = string.Join("|", addrList.Select(b => b.Address).ToArray());
             string url = "https://chainz.cryptoid.info/grs/api.dws?q=unspent&key=632ba1ffd292&active=" + addresses;
             Response<JObject> apiResp = await SendApiRequestAsync(url);
             if (apiResp.Errors.Any()) {
