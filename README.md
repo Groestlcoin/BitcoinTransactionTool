@@ -1,4 +1,4 @@
-<img src="GrsTxnTool.png" width="64" alt="Groestlcoin Tool Logo">
+<img src="/BitcoinTransactionTool/GrsTxnTool.png" width="128" alt="Groestlcoin Tool Logo">
 
 # Groestlcoin Transaction Tool
 **Language:** C#
