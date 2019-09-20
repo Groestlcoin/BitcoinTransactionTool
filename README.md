@@ -1,4 +1,4 @@
-![Logo](https://i.imgur.com/pUCReEi.jpg)
+![Logo](Splash.png)
 # Bitcoin Transaction Tool
 **Language:** C#
 
