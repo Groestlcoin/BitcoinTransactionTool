@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroestlcoinTransactionTool"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrary", "CommonLibrary\CommonLibrary.csproj", "{3C4402E4-D931-4996-86FB-55FF6F9E7EBD}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "TransactionToolInstaller", "TransactionToolInstaller\TransactionToolInstaller.vdproj", "{557ED560-6914-481E-8E0C-C2A360AC0153}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,11 +23,17 @@ Global
 		{3C4402E4-D931-4996-86FB-55FF6F9E7EBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C4402E4-D931-4996-86FB-55FF6F9E7EBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C4402E4-D931-4996-86FB-55FF6F9E7EBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{557ED560-6914-481E-8E0C-C2A360AC0153}.Debug|Any CPU.ActiveCfg = Debug
+		{557ED560-6914-481E-8E0C-C2A360AC0153}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE8C02F5-810E-403E-BC5C-D35F23821FE4}
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 EndGlobal
