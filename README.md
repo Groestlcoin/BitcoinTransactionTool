@@ -1,4 +1,5 @@
-![Logo](/BitcoinTransactionTool/GrsTxnTool.png)
+<img src="GrsTxnTool.png" width="64" alt="Groestlcoin Tool Logo">
+
 # Groestlcoin Transaction Tool
 **Language:** C#
 
