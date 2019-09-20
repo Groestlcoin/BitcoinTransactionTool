@@ -1,4 +1,4 @@
-![Logo](Splash.png)
+![Logo](/BitcoinTransactionTool/GrsTxnTool.png)
 # Bitcoin Transaction Tool
 **Language:** C#
 
@@ -7,7 +7,7 @@
 - QRCoder
 
 This is an open source tool for creating bitcoin transactions (unsigned raw transaction) and also to edit existing transactions by taking the same input and output and changing them (e.g. changing fee, locktime,...)
-![ScreenShot](https://i.imgur.com/ePg5jcq.jpg)
+![ScreenShot](Splash.png)
 
 
 ##Features
